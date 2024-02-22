@@ -27,7 +27,24 @@ footer {
   font-weight: bold;
   margin-top: 10px;
 }
-
+@keyframes icons-flying {
+  0% {
+    transform: translateY(0px);
+  }
+  30% {
+    transform: translateY(-10px);
+  }
+  70% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
 .footer-icons__img {
   width: 30px;
+}
+.footer-icons:hover .footer-icons__img {
+  /*footer-icons라는 블럭이 hover 됐을 때, 그 밑에 footer-icons__img에게 효과를 줌 ; 버벅이는 현상 해결*/
+  animation: 2s icons-flying;
 }
