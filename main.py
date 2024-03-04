@@ -8,6 +8,23 @@ import sqlite3
 con=sqlite3.connect('market.db',check_same_thread=False)
 cur=con.cursor()
 
+# 배포를 하게 되면 배포된 백엔드 서버에서 테이블을 생성해줘야 함 -> 테이블 없으면 데이터 넣을 곳이 없기 때문
+# 백엔드 코드에서 자동으로 데이터베이스 테이블을 생성할 수 있도록 sql문 작성
+# 배포됐는데 서버가 잠깐 내려갔다가 올라올 수 있는데 그 때마다 테이블을 생성하게 되면 오류 발생
+# 그래서 오류 방지하기 위해 테이블이 없을 때만 생성할 수 있도록 해야 함
+# IF NOT EXISTS를 추가해줘서 테이블이 없을 때만 생성되는 SQL문
+cur.execute=(f"""
+             CREATE TABLE IF NOT EXISTS items (
+                id INTEGER PRIMARY KEY,
+                title TEXT NOT NULL,
+                image BLOB,
+                price INTEGER NOT NULL,
+                description TEXT,
+                place TEXT NOT NULL,
+                insertAt INTEGER NOT NULL
+                ); 
+                """)
+
 app=FastAPI()
 
 @app.post('/items')
