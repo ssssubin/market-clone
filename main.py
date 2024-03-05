@@ -13,7 +13,7 @@ cur=con.cursor()
 # 배포됐는데 서버가 잠깐 내려갔다가 올라올 수 있는데 그 때마다 테이블을 생성하게 되면 오류 발생
 # 그래서 오류 방지하기 위해 테이블이 없을 때만 생성할 수 있도록 해야 함
 # IF NOT EXISTS를 추가해줘서 테이블이 없을 때만 생성되는 SQL문
-cur.execute=(f"""
+cur.execute(f"""
              CREATE TABLE IF NOT EXISTS items (
                 id INTEGER PRIMARY KEY,
                 title TEXT NOT NULL,
@@ -23,7 +23,8 @@ cur.execute=(f"""
                 place TEXT NOT NULL,
                 insertAt INTEGER NOT NULL
                 ); 
-                """)
+                """
+            )
 
 app=FastAPI()
 
@@ -76,5 +77,17 @@ async def get_image(item_id):
                             SELECT image from items WHERE id={item_id}
                             """).fetchone()[0] #하나의 column만 가져올거라 fetchone 사용, 튜플이라는 데이터타입으로 내려오기 때문에 껍데기 하나 벗기기 위해 [0]사용
     return Response(content=bytes.fromhex(image_bytes)) # 16진법으로 된 거를 이진법으로 바꿔서 응답
+
+#회원가입 요청이기 때문에 post
+@app.post('/signup')
+def signup(id:Annotated[str, Form()], password:Annotated[str, Form()], name:Annotated[str, Form()], email:Annotated[str, Form()]):
+    #받은 정보를 db에 저장
+    cur.execute(f"""
+                INSERT INTO users(id, name, email, password)
+                VALUES ('{id}','{name}','{email}','{password}')
+                """)
+    con.commit()
+    return '200'
+# 이미 가입되어 있는 유저임에도 회원가입이 될 수 있다는 문제점 존재 => 판단하는 로직 한 번 작성해보기!
 
 app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")
