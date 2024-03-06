@@ -18,7 +18,7 @@ const renderData = (data) => {
   const main = document.querySelector("main");
 
   //데이터 불러옴, reverse() : 배열 안의 데이터들을 거꾸로 정렬
-  data.forEach(async (obj) => {
+  data.reverse().forEach(async (obj) => {
     //obj : 데이터 값
     //CSS 파일을 className으로 미리 정해줘서 ClassName을 통해 css가 적용됨
     const div = document.createElement("div");
@@ -61,7 +61,19 @@ const renderData = (data) => {
 
 //서버로부터 데이터 받아옴
 const fetchList = async () => {
-  const res = await fetch("/items");
+  //getItem()사용해서 로컬 스토리지에 있는 'token'값을 가져옴
+  const accessToken = window.localStorage.getItem("token");
+  const res = await fetch("/items", {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+
+  if (res.status === 401) {
+    alert("로그인이 필요합니다!");
+    window.location.pathname = "/login.html";
+    return;
+  }
   const data = await res.json();
   renderData(data);
 };

@@ -30,7 +30,7 @@ const handleSubmit = async (event) => {
     //서버한테 요청하고 회원가입에 성공했다는 응답을 받았을 때만 성공했다는 메시지 출력
     if (data === "200") {
       alert("회원가입에 성공했습니다!");
-      window.location.pathname = "/login.html";
+      window.location.pathname = "/login.html"; //회원가입에 성공하면 login 페이지로 보냄
     }
   } else {
     div.innerText = "비밀번호가 같지 않습니다.";
