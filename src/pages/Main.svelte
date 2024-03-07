@@ -1,3 +1,8 @@
+<!-- <script>
+  let hour = new Date().getHours();
+  let min = new Date().getMinutes();
+</script> -->
+
 <script>
   let hour = new Date().getHours();
   let min = new Date().getMinutes();
