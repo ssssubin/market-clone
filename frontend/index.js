@@ -1,18 +1,3 @@
-//시간정보 함수
-const calcTime = (timestamp) => {
-  // FormData가 세계시간으로 넘어오기 때문에 세계시간기준으로 맞춰주기 위해 9시간을 빼줘야함
-  const curTime = new Date().getTime() - 9 * 60 * 60 * 1000; //9시간*60분*60초*1000(ms)
-  const time = new Date(curTime - timestamp); //new Date()를 씌워주는 건 시간값으로 바꿔주기 위해
-  const hour = time.getHours();
-  const min = time.getMinutes();
-  const sec = time.getSeconds();
-
-  if (hour > 0) return `${hour}시간 전`;
-  else if (min > 0) return `${min}분 전`;
-  else if (sec > 0) return `${sec}초 전`;
-  else return "방금 전";
-};
-
 //데이터들을 주는 함수
 const renderData = (data) => {
   const main = document.querySelector("main");
